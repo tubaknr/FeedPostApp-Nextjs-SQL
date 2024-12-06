@@ -1,11 +1,13 @@
-import FormSubmit from "@/components/form-submit";
+import PostForm from "@/components/post-form";
 import { storePosts } from "@/lib/posts";
 import { redirect } from "next/navigation";
 
 export default function NewPostPage(){
 
     // SERVER FORM ACTION
-    async function createPost(formData) { //formData buraya otomatik atılır; user ın girdiklerini verir.
+    async function createPost(prevState, formData) { 
+        //formData buraya otomatik atılır; user ın girdiklerini verir.
+        // useFormState kullanınca prevState geldi action'a İLK PARAMETER olarak.
         "use server"; //bu satır olmazsa->CLINET SIDE. NORMA FORM ACTION olurdu. Bu satır ile birlikte: SERVER SIDE - SERVER ACTION.
         // SERVER ACTION --> MUST BE ASYNC FCN.
         // ONLY EXECUTE ON THE SERVER. DOES NTO WORK ON CLIENT SIDE.
@@ -14,6 +16,21 @@ export default function NewPostPage(){
         const image = formData.get("image"); // form un içindeki name="image" sayesinde alındı
         const content = formData.get("content"); // form un içindeki name="content" sayesinde alındı
 
+        let errors = [];
+        if(!title || title.trim().length === 0){
+            errors.push("Title is required.");
+        }
+        if(!content || content.trim().length === 0){
+            errors.push("Content is required.");
+        }
+        if(!image || image.size === 0){
+            errors.push("Image is required.");
+        }
+
+        // eğer kullanıcı düzgün doldurmadıysa hata döndür
+        if(errors.length > 0){ 
+            return { errors };
+        }
         // console.log(title, image, content);
         // Send data to backend
         storePosts({
@@ -23,38 +40,12 @@ export default function NewPostPage(){
             userId: 1 //for this demo, user 1 is the always post creator.
         });
         redirect('/feed');
-    }
+    };
 
+    // BURASI HALA SERVER-SIDE KALSIN DİYE HOOK KULLANIMI GEREKTİREN KISIMLAR POSTFORM'A TAŞINDI.
     return(
-        <>
-        <h1>Create a new post</h1>
-        <form action={createPost}>
 
-            <p className="form-control">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" name="title"/>
-            </p>
-            
-            <p className="form-control">
-                <label htmlFor="image">Image URL</label>
-                <input 
-                    type="file" 
-                    accept="image/png, image/jpeg"
-                    id="image"
-                    name="image"/>
-            </p>
-            
-            <p className="form-control">
-                <label htmlFor="content">Content</label>
-                <textarea id="content" name="content" rows="5" />
-            </p>
-
-            <p className="form-actions">
-                <FormSubmit />
-            </p>
-
-        </form>
-        </>
+        <PostForm action={createPost} />
     );
 }
 
