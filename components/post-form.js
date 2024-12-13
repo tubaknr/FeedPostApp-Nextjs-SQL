@@ -4,7 +4,7 @@ import FormSubmit from "./form-submit";
 
 export default function PostForm({action}){
     
-    // hata dönerse useFormState (ACTION FCN, INITIAL STATE) initial state = no error = {}
+    // hata dönerse useFormState(ACTION FCN, INITIAL STATE) initial state = no error = {}
     const [state, formAction] = useFormState(action, {});
 
     return(
