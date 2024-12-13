@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
     <h1>Welocme back!</h1>
-    <p>Here's what you've missed.</p>
+    <p>Here&apos;s what you&apos;ve missed.</p>
     
     <section id="latest-posts">
     <Suspense fallback={<p>Loading recent posts...</p>}>

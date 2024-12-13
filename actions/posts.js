@@ -50,6 +50,8 @@ export async function createPost(prevState, formData) {
         content,
         userId: 1 //for this demo, user 1 is the always post creator.
     });
+
+    revalidatePath('/', 'layout');
     redirect('/feed');
 };
 
