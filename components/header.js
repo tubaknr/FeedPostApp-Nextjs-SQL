@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
 
@@ -6,8 +7,9 @@ export default function Header(){
     return(
         <header id="main-header">
         <Link href="/">
-            <img 
-                src={logo.src} 
+            <Image 
+                priority
+                src={logo} 
                 alt="Moile phone with posts feed on it"/>
         </Link>
         <nav>

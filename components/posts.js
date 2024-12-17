@@ -1,18 +1,29 @@
 "use client";
+import Image from "next/image";
 import { formatDate } from "@/lib/format";
 import LikeButton from "./like-icon";
 import { togglePostLikeStatus } from "@/actions/posts";
 import { use, useOptimistic } from "react";
 
+// pre optimization
+function imageLoader(config){
+    console.log(config);
+    const urlStart = config.src.split('upload/')[0];
+    const urlEnd = config.src.split('upload/')[1];
+    const transformations = `w_200,q_${config.quality}` // userın yüklediği resmin boyutunu küçült
+    // now smaller image is requested from backend. 
+    return `${urlStart}upload/${transformations}/${urlEnd}`; // resmin yeni url'i
+}
+
 function Post({post, action}){
-    console.log("POSTID:", post.id);
-    console.log("ISLIKED POST COMP :", (post.isLiked));
+    // console.log("POSTID:", post.id);
+    // console.log("ISLIKED POST COMP :", (post.isLiked));
 
     return(
         <>
         <article className="post">
             <div className="post-image">
-                <img src={post.image} alt={post.title}/>
+                <Image loader={imageLoader} src={post.image} fill alt={post.title} quality={50}/>
             </div>
             <div className="post-content">
             <header>

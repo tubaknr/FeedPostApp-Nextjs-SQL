@@ -159,9 +159,14 @@ main {
 }
 
 .post img {
+
+  object-fit: cover;
+}
+
+.post-image{
   width: 8rem;
   height: 6rem;
-  object-fit: cover;
+  position: relative;
 }
 
 .post-content {
